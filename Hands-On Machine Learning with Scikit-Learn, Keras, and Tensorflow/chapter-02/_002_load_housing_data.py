@@ -3,6 +3,7 @@ import pandas as pd
 import tarfile
 import urllib.request
 import matplotlib.pyplot as plt
+import numpy as np
 
 def load_housing_data():
     tarball_path = Path("datasets/housing.tgz")
@@ -41,3 +42,13 @@ plt.rc('ytick', labelsize=10)
 housing.hist(bins=50, figsize=(12, 8))
 # save_fig("attribute_histogram_plots")  # extra code
 plt.show()
+
+def shuffle_and_split_data(data, test_ratio):
+    shuffled_indices = np.random.permutation(len(data))
+    test_set_size = int(len(data) * test_ratio)
+    test_indices = shuffled_indices[:test_set_size]
+    train_indices = shuffled_indices[test_set_size:]
+    return data.iloc[train_indices], data.iloc[test_indices]
+train_set, test_set = shuffle_and_split_data(housing, 0.2)
+print(len(train_set))
+print(len(test_set))
